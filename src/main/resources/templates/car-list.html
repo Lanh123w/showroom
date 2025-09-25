@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CITY FORD – FORD BÌNH TRIỆU</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
+      <div class="text-end">
+        <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
+        <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
+      </div>
+    </div>
+  </div>
+  <div class="container mt-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">Giới thiệu</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button">
+              Sản phẩm
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productDropdown">
+              <li th:each="cat : ${carCategories}">
+                <a class="dropdown-item" th:href="@{'/car/category/' + ${cat.id}}" th:text="${cat.name}">SUV</a>
+              </li>
+            </ul>
+          </li>
+  
+          <li class="nav-item"><a class="nav-link" href="/news">Tin tức</a></li>
+          <li class="nav-item"><a class="nav-link" href="/promotions">Khuyến mãi</a></li>
+          <li class="nav-item"><a class="nav-link" href="/installment">Mua xe trả góp</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services">Dịch vụ</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact">Liên hệ</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Banner -->
+  <div class="container mt-3">
+    <img th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
+  </div>
+
+  <!-- Nội dung chính: 3 cột -->
+  <div class="container mt-5">
+    <div class="row g-4">
+      
+      <!-- Cột trái: Thông tin liên hệ -->
+      <div class="col-md-3">
+        <h4 class="mb-3">📞 Thông tin liên hệ</h4>
+        <p><strong>Hotline:</strong> <span th:text="${settings.hotline}">079-256-2288</span></p>
+        <p><strong>Email:</strong> <span th:text="${settings.email}">info@cityford.vn</span></p>
+        <p><strong>Địa chỉ:</strong> <span th:text="${settings.address}">218 Quốc lộ 13...</span></p>
+        <p><strong>Zalo tư vấn:</strong> <a th:href="'https://zalo.me/' + ${settings.zalo}" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
+        <p><strong>Website:</strong> <a th:href="${settings.website}" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+      </div>
+
+      <!-- Cột giữa: Danh sách xe -->
+      <div class="col-md-6">
+        <h3 class="mb-4 text-center">🚗 Các xe thuộc loại: <span th:text="${selectedCategory}">SUV</span></h3>
+        <div class="row">
+          <div th:each="car : ${cars}" class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+              <img th:src="@{'/images/' + ${car.imagePath}}" class="card-img-top" th:alt="${car.name}">
+              <div class="card-body">
+                <h5 class="card-title" th:text="${car.name} + ' - ' + ${car.model}">Tên xe</h5>
+                <p>Giá: <span th:text="${car.formattedPrice}"></span> VND</p>
+                <a th:href="@{'/car/show/' + ${car.id}}" class="btn btn-info w-100">Xem chi tiết</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      <!-- Cột phải: Tin tức & khuyến mãi -->
+      <div class="col-md-3">
+        <!-- Tin tức nổi bật -->
+        <h4 class="mb-3 text-uppercase fw-bold text-center">📰 Tin tức nổi bật</h4>
+        <div class="row row-cols-1 g-4 mb-4">
+          <div th:each="news : ${latestNews}" class="col">
+            <div class="card h-100 shadow-sm">
+              <img th:src="@{'/images/' + ${news.imagePath}}" class="card-img-top" th:alt="${news.title}">
+              <div class="card-body">
+                <h6 class="card-title text-primary fw-bold" th:text="${news.title}">Tiêu đề tin tức</h6>
+                <p class="card-text small" th:text="${news.content}">Nội dung tin tức</p>
+                <p class="text-muted small">
+                  🗓️ Ngày đăng:
+                  <span th:if="${news.createdAt != null}"
+                        th:text="${#temporals.format(news.createdAt, 'dd/MM/yyyy HH:mm')}">14/06/2023</span>
+                  <span th:if="${news.createdAt == null}">Không xác định</span>
+                </p>
+                <a th:href="@{'/news/' + ${news.id}}" class="btn btn-outline-primary btn-sm w-100">Xem chi tiết</a>
+              </div>
+            </div>
+          </div>
+          <div th:if="${#lists.isEmpty(latestNews)}" class="col-12 text-center">
+            <p class="text-muted">Hiện chưa có tin tức nào được đăng.</p>
+          </div>
+        </div>
+      
+        <!-- Khuyến mãi mới -->
+        <h4 class="mb-3 text-uppercase fw-bold text-center">🎁 Khuyến mãi mới</h4>
+        <div class="row row-cols-1 g-4">
+          <div th:each="promo : ${latestPromotions}" class="col">
+            <div class="card h-100 shadow-sm">
+              <img th:src="@{'/images/' + ${promo.imagePath}}" class="card-img-top" th:alt="${promo.title}">
+              <div class="card-body">
+                <h6 class="card-title text-success fw-bold" th:text="${promo.title}">Tiêu đề khuyến mãi</h6>
+                <p class="card-text small" th:text="${promo.description}">Nội dung khuyến mãi</p>
+              </div>
+              <div class="card-footer bg-light text-center">
+                <small class="text-muted">
+                  📅 Áp dụng từ 
+                  <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span> 
+                  đến 
+                  <span th:text="${#temporals.format(promo.endDate, 'dd/MM/yyyy')}">30/10/2025</span>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div th:if="${#lists.isEmpty(latestPromotions)}" class="col-12 text-center">
+            <p class="text-muted">Hiện chưa có chương trình khuyến mãi nào.</p>
+          </div>
+        </div>
+      </div>
+      
+      <footer class="bg-dark text-white text-center mt-5 p-4">
+        <p><strong>Thông tin liên hệ</strong></p>
+    <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>
+    <p>📞 Hotline bán hàng (24/7): <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
+    <p>📱 Zalo tư vấn (24/7): <a th:href="'https://zalo.me/' + ${settings.zalo}" class="text-white" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
+    <p>✅ Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+    <span th:text="${settings.footerText}">© City Ford 2025. All rights reserved.</span>
+</footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<style>
+    .navbar-nav .dropdown:hover .dropdown-menu {
+       display: block;
+       margin-top: 0;
+     }
+   </style>

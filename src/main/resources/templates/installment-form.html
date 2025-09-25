@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng ký trả góp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
+      <div class="text-end">
+        <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
+        <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <div class="container mt-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="/about">Giới thiệu</a></li>
+          <li class="nav-item"><a class="nav-link" href="/product">Sản phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="/news">Tin tức</a></li>
+          <li class="nav-item"><a class="nav-link" href="/promotions">Khuyến mãi</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/installment">Mua xe trả góp</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services">Dịch vụ</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact">Liên hệ</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Banner -->
+  <div class="container mt-3">
+    <img th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
+  </div>
+
+  <!-- Nội dung 3 cột -->
+  <div class="container mt-5">
+    <div class="row g-4">
+
+      <!-- Cột trái -->
+      <div class="col-md-3">
+        <div class="bg-light p-3 rounded shadow-sm">
+          <h5 class="text-primary">Danh mục</h5>
+          <ul class="list-unstyled">
+            <li><a href="/product" class="text-dark">Xe đang bán</a></li>
+            <li><a href="/news" class="text-dark">Tin tức</a></li>
+            <li><a href="/contact" class="text-dark">Liên hệ</a></li>
+          </ul>
+          <hr>
+          <h6 class="text-secondary">Quảng cáo</h6>
+          <img src="/images/ad.jpg" alt="Quảng cáo" class="img-fluid rounded">
+        </div>
+      </div>
+
+      <!-- Cột giữa: Form đăng ký -->
+      <div th:if="${success}" class="alert alert-success text-center">
+        <span th:text="${success}">Đăng ký thành công!</span>
+      </div>      
+      <div class="col-md-6">
+        <h4 class="text-center mb-4 text-uppercase fw-bold">📋 Đăng ký mua xe trả góp</h4>
+        <form th:action="@{/installment/submit}" th:object="${installment}" method="post" class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Họ tên</label>
+            <input type="text" th:field="*{customerName}" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" th:field="*{phone}" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Mẫu xe</label>
+            <select th:field="*{carModel}" class="form-select" id="carSelect" required>
+              <option value="">-- Chọn mẫu xe --</option>
+              <option th:each="car : ${cars}" th:value="${car.name}" th:text="${car.name}" th:data-price="${car.price}"></option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Giá xe (VNĐ)</label>
+            <input type="number" th:field="*{carPrice}" class="form-control" id="carPrice" readonly required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Số tiền trả trước (VNĐ)</label>
+            <input type="number" th:field="*{downPayment}" class="form-control" id="downPayment" required min="0" step="1000000">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Thời hạn trả góp (tháng)</label>
+            <input type="number" th:field="*{termMonths}" class="form-control" id="termMonths" required min="1" step="1">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Lãi suất (%/năm)</label>
+            <input type="number" th:field="*{interestRate}" class="form-control" id="interestRate" min="0" step="0.1" required>
+          </div>          
+          <div class="col-md-6">
+            <label class="form-label">Số tiền còn lại (VNĐ)</label>
+            <input type="number" class="form-control" id="remainingAmount" readonly>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tiền hàng tháng phải trả (VNĐ)</label>
+            <input type="number" class="form-control" id="monthlyPayment" readonly>
+          </div>
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary px-5">Gửi đăng ký</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="col-md-3">
+        <div class="bg-light p-3 rounded shadow-sm">
+          <h5 class="text-primary">Thông tin liên hệ</h5>
+          <p>📞 <span th:text="${settings.hotline}">079-256-2288</span></p>
+          <p>📱 Zalo: <a th:href="'https://zalo.me/' + ${settings.zalo}" target="_blank" th:text="${settings.zalo}">0792562288</a></p>
+          <p>📧 Email: <span th:text="${settings.email}">info@cityford.vn</span></p>
+          <p>📍 Địa chỉ: <span th:text="${settings.address}">218 Quốc lộ 13, TP. Thủ Đức</span></p>
+          <hr>
+          <h6 class="text-secondary">Tin nổi bật</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-dark">Ưu đãi tháng 10</a></li>
+            <li><a href="#" class="text-dark">Ford Everest 2025 ra mắt</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center mt-5 p-4">
+    <div class="container">
+      <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức của Ford Việt Nam</p>
+      <p>📞 Hotline: <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
+      <p>📱 Zalo: <a th:href="'https://zalo.me/' + ${settings.zalo}" class="text-white" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
+      <p>🌐 Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+    </div>
+  </footer>
+
+  <!-- Script tính toán tự động -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const carSelect = document.getElementById("carSelect");
+      const carPriceInput = document.getElementById("carPrice");
+      const downPaymentInput = document.getElementById("downPayment");
+      const termMonthsInput = document.getElementById("termMonths");
+      const interestRateInput = document.getElementById("interestRate");
+      const remainingAmountInput = document.getElementById("remainingAmount");
+      const monthlyPaymentInput = document.getElementById("monthlyPayment");
+
+      function updateCalculations() {
+        const carPrice = parseFloat(carPriceInput.value) || 0;
+        const downPayment = parseFloat(downPaymentInput.value) || 0;
+        const termMonths = parseInt(termMonthsInput.value) || 1;
+        const annualInterest = parseFloat(interestRateInput.value) || 0;
+
+        const monthlyInterestRate = annualInterest / 100 / 12;
+        const remaining = carPrice - downPayment;
+
+        let monthly = 0;
+        if (monthlyInterestRate > 0) {
+          monthly = remaining * monthlyInterestRate / (1 - Math.pow(1 + monthlyInterestRate, -termMonths));
+        } else {
+          monthly = remaining / termMonths;
+        }
+
+        remainingAmountInput.value = remaining > 0 ? Math.round(remaining) : 0;
+        monthlyPaymentInput.value = monthly > 0 ? Math.round(monthly) : 0;
+      }
+
+      carSelect.addEventListener("change", function () {
+        const selectedOption = carSelect.options[carSelect.selectedIndex];
+        const price = selectedOption.getAttribute("data-price");
+        carPriceInput.value = price ? parseInt(price) : "";
+        updateCalculations();
+      });
+
+      downPaymentInput.addEventListener("input", updateCalculations);
+      termMonthsInput.addEventListener("input", updateCalculations);
+      interestRateInput.addEventListener("input", updateCalculations);
+      carPriceInput.addEventListener("input", updateCalculations);
+
+      // Tự động cập nhật khi trang vừa load
+      carSelect.dispatchEvent(new Event("change"));
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<style>
+  .navbar-nav .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+</style>
