@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: showroom
+    env: java
+    buildCommand: ./mvnw package
+    startCommand: java -jar target/*.jar
+    plan: free
+    envVars:
+      - key: MYSQLHOST
+        value: nozomi.proxy.rlwy.net
+      - key: MYSQLPORT
+        value: 14164
+      - key: MYSQLDATABASE
+        value: railway
+      - key: MYSQLUSER
+        value: root
+      - key: MYSQLPASSWORD
+        value: rOMesFFwGdhcvdpAKAnzaAostnfUOwwn
+
