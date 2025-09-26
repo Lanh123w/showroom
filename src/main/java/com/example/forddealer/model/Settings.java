@@ -21,11 +21,8 @@ public class Settings {
     private String address;
     private String zalo;
     private String website;
+    private String facebook;
 
- 
-
-
-    // Getters and Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -55,6 +52,9 @@ public class Settings {
 
     public String getWebsite() { return website; }
     public void setWebsite(String website) { this.website = website; }
+
+    public String getFacebook() { return facebook; }
+    public void setFacebook(String facebook) { this.facebook = facebook; }
 
   
 }

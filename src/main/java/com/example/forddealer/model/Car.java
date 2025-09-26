@@ -1,7 +1,15 @@
 package com.example.forddealer.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
+import java.util.List;
 @Entity
 public class Car {
 
@@ -12,7 +20,7 @@ public class Car {
     private String name;
     private String model;
     private int year;
-    private long price;
+    private Long price;
     private String imagePath;
     private String description;
 
@@ -20,8 +28,25 @@ public class Car {
     @JoinColumn(name = "category_id")
     private CarCategory category;
 
+    @ManyToMany
+    @JoinTable(
+    name = "car_color_mapping",
+    joinColumns = @JoinColumn(name = "car_id"),
+    inverseJoinColumns = @JoinColumn(name = "color_id"))
+    private List<CarColor> colors;
+
+
     @Transient
     private String formattedPrice;
+
+    public List<CarColor> getColors() {
+        return colors;
+    }
+    
+    public void setColors(List<CarColor> colors) {
+        this.colors = colors;
+    }
+    
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -37,7 +62,7 @@ public class Car {
     public void setYear(int year) { this.year = year; }
 
     public long getPrice() { return price; }
-    public void setPrice(long price) { this.price = price; }
+    public void setPrice(Long price) { this.price = price; }
 
     public String getImagePath() { return imagePath; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }

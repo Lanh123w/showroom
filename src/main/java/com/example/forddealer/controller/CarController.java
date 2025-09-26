@@ -1,18 +1,20 @@
 package com.example.forddealer.controller;
 
-import com.example.forddealer.model.Car;
-import com.example.forddealer.model.CarCategory;
-import com.example.forddealer.service.CarService;
-import com.example.forddealer.service.SettingsService;
-import com.example.forddealer.service.NewsService;
-import com.example.forddealer.service.PromotionService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import com.example.forddealer.model.Car;
+import com.example.forddealer.model.CarCategory;
+import com.example.forddealer.service.CarService;
+import com.example.forddealer.service.NewsService;
+import com.example.forddealer.service.PromotionService;
+import com.example.forddealer.service.SettingsService;
 
 @Controller
 @RequestMapping("/car")
@@ -34,7 +36,7 @@ public class CarController {
         this.promotionService = promotionService;
     }
 
-
+    // ✅ Hiển thị chi tiết xe
     @GetMapping("/show/{id}")
     public String showCar(@PathVariable Long id, Model model) {
         Car car = carService.getById(id);
@@ -44,10 +46,11 @@ public class CarController {
             return "error";
         }
 
-        if (car.getPrice() == 0) {
+        Long price = car.getPrice();
+        if (price == null || price == 0) {
             car.setFormattedPrice("Chưa cập nhật");
         } else {
-            String formattedPrice = String.format("%,d", car.getPrice());
+            String formattedPrice = String.format("%,d", price);
             car.setFormattedPrice(formattedPrice.replace(",", "."));
         }
 
@@ -58,6 +61,7 @@ public class CarController {
         return "car-detail";
     }
 
+    // ✅ Hiển thị xe theo loại
     @GetMapping("/category/{id}")
     public String showCarsByCategory(@PathVariable Long id, Model model) {
         List<Car> cars = carService.getByCategoryId(id);
@@ -69,6 +73,7 @@ public class CarController {
                 categoryName = category.getName();
             }
         }
+
         model.addAttribute("cars", cars);
         model.addAttribute("selectedCategory", categoryName);
         model.addAttribute("settings", settingsService.getSettings());
@@ -77,5 +82,29 @@ public class CarController {
         model.addAttribute("latestPromotions", promotionService.getActivePromotions());
 
         return "car-list";
+    }
+
+    // ✅ Trang tham khảo xe
+    @GetMapping("/tham-khao-xe")
+    public String showReferenceCars(Model model) {
+        List<Car> cars = carService.getAllCars();
+
+        for (Car car : cars) {
+            Long price = car.getPrice();
+            if (price == null || price == 0) {
+                car.setFormattedPrice("Chưa cập nhật");
+            } else {
+                String formatted = String.format("%,d", price);
+                car.setFormattedPrice(formatted.replace(",", "."));
+            }
+        }
+
+        model.addAttribute("cars", cars);
+        model.addAttribute("settings", settingsService.getSettings());
+        model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("latestNews", newsService.getAll());
+        model.addAttribute("latestPromotions", promotionService.getActivePromotions());
+
+        return "car-reference";
     }
 }

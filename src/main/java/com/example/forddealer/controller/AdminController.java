@@ -1,5 +1,19 @@
 package com.example.forddealer.controller;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.forddealer.model.Admin;
 import com.example.forddealer.model.Car;
 import com.example.forddealer.model.Settings;
@@ -7,17 +21,8 @@ import com.example.forddealer.service.AdminService;
 import com.example.forddealer.service.CarCategoryService;
 import com.example.forddealer.service.CarService;
 import com.example.forddealer.service.SettingsService;
-import jakarta.servlet.http.HttpSession;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.io.File;
-import java.io.IOException;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
@@ -204,13 +209,14 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-    
     @GetMapping("/edit-car/{id}")
-    public String editCarForm(@PathVariable Long id, Model model) {
-        Car car = carService.getById(id);
-        model.addAttribute("car", car);
-        return "admin/edit-car";
-    }
+public String editCarForm(@PathVariable Long id, Model model) {
+    Car car = carService.getById(id);
+    model.addAttribute("car", car);
+    model.addAttribute("categories", carCategoryService.getAll());
+    return "admin/edit-car";
+}
+
 
     @PostMapping("/update-car")
     public String updateCar(@ModelAttribute Car car,

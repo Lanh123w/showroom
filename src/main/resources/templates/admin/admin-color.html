@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý màu xe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="container mt-2">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav mx-auto">
+              <div class="text-white ms-auto" th:if="${session.admin != null}">
+                👋 Xin chào, <strong th:text="${session.admin.username}">Admin</strong>
+              </div>
+      
+              <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/promotion-form">Chỉnh sửa khuyến mãi</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/news-form">Chỉnh sửa tin tức</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/create-account">Tạo tài khoản</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/change-password">Đổi mật khẩu</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/accounts">Danh sách tài khoản</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/services">Quản lí dịch vụ</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/categories">Danh sách loại xe</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/colors">Chỉnh sửa màu xe</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    <h3 class="mb-3">🎨 Quản lý màu xe</h3>
+
+    <!-- Form thêm/sửa màu -->
+    <form th:action="@{/admin/colors/save}" method="post" th:object="${color}" class="row g-3 mb-4">
+        <input type="hidden" th:field="*{id}" />
+        <div class="col-md-6">
+            <label for="name" class="form-label">Tên màu</label>
+            <input type="text" class="form-control" th:field="*{name}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="priceAdjustment" class="form-label">Giá cộng thêm</label>
+            <input type="number" class="form-control" th:field="*{priceAdjustment}" required>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Lưu màu</button>
+        </div>
+    </form>
+
+    <!-- Bảng danh sách màu -->
+    <table class="table table-bordered">
+        <thead>
+            <tr><th>ID</th><th>Tên màu</th><th>Giá cộng thêm</th><th>Hành động</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="color : ${colors}">
+                <td th:text="${color.id}"></td>
+                <td th:text="${color.name}"></td>
+                <td th:text="${color.priceAdjustment}"></td>
+                <td>
+                    <a th:href="@{'/admin/colors/edit/' + ${color.id}}" class="btn btn-warning btn-sm">Sửa</a>
+                    <a th:href="@{'/admin/colors/delete/' + ${color.id}}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Xóa màu này?')">Xóa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr class="my-4">
+
+    <h4>🚗 Gán màu cho xe</h4>
+
+    <!-- Form gán màu cho xe -->
+    <form th:action="@{/admin/colors/mapping/save}" method="post" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label for="carId" class="form-label">Chọn xe</label>
+            <select class="form-select" name="carId" required>
+                <option th:each="car : ${cars}" th:value="${car.id}" th:text="${car.name}"></option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="colorId" class="form-label">Chọn màu</label>
+            <select class="form-select" name="colorId" required>
+                <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.name}"></option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Gán màu</button>
+        </div>
+    </form>
+
+
+    <h5 class="mt-4 mb-3">📋 Danh sách màu đã gán cho xe</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th style="width: 30%">Tên xe</th>
+                    <th style="width: 30%">Màu</th>
+                    <th style="width: 40%">Hành động</th>
+                </tr>
+            </thead>
+        <tbody>
+            <tr th:each="car : ${cars}">
+            <td th:rowspan="${#lists.size(car.colors)}" th:text="${car.name}"class="text-center align-middle fw-semibold"> </td>
+            <td th:each="color : ${car.colors}" th:text="${color.name}" class="text-center"></td>
+            <td class="text-center" th:each="color : ${car.colors}">
+             <a th:href="@{'/admin/colors/mapping/delete?carId=' + ${car.id} + '&colorId=' + ${color.id}}"  class="btn btn-danger btn-sm"
+             onclick="return confirm('Xóa màu này khỏi xe?')">Xóa</a>
+            </td>
+            </tr>
+            </tbody>
+    </table>
+</div>
+
+    
+</body>
+</html>
