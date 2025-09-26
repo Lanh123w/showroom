@@ -266,17 +266,7 @@ public String editCarForm(@PathVariable Long id, Model model) {
             settings.setLogoPath(old.getLogoPath());
         }
 
-        if (bannerFile != null && !bannerFile.isEmpty()) {
-            if (old.getBannerPath() != null) {
-                File oldBanner = new File(uploadDir + old.getBannerPath());
-                if (oldBanner.exists()) oldBanner.delete();
-            }
-            String bannerName = System.currentTimeMillis() + "_" + bannerFile.getOriginalFilename().replaceAll("\\s+", "_");
-            bannerFile.transferTo(new File(uploadDir + bannerName));
-            settings.setBannerPath(bannerName);
-        } else {
-            settings.setBannerPath(old.getBannerPath());
-        }
+
 
         settingsService.save(settings);
         return "redirect:/admin/dashboard";

@@ -47,15 +47,28 @@
       </div>
     </nav>
   </div>
-<div class="container mt-3">
-    <img th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
-
-</div>
-  <!-- Nội dung 3 cột -->
+  <div class="container mt-3">
+    <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
+          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+  
   <div class="container mt-5">
     <div class="row g-4">
       
-      <!-- Cột trái -->
+
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Danh mục</h5>
@@ -70,7 +83,7 @@
         </div>
       </div>
 
-      <!-- Cột giữa: Tin tức -->
+
       <div class="col-md-6">
         <h4 class="mb-4 text-center text-uppercase fw-bold">📰 Tin tức mới nhất từ City Ford</h4>
         <div class="row row-cols-1 g-4">
@@ -79,7 +92,9 @@
               <img th:src="@{'/images/' + ${item.imagePath}}" class="card-img-top" th:alt="${item.title}">
               <div class="card-body">
                 <h5 class="card-title text-primary" th:text="${item.title}">Tiêu đề tin</h5>
-                <p class="card-text" th:text="${item.content}">Nội dung tin tức</p>
+                <p class="card-text" th:text="${#strings.abbreviate(item.content, 100)}">Nội dung tin tức</p>
+                <a th:href="@{'/news/' + ${item.id}}" class="btn btn-outline-primary btn-sm mt-2">Xem chi tiết</a>
+
                 <p class="text-muted small">
                   🗓️ Ngày đăng:
                   <span th:if="${item.createdAt != null}"
@@ -95,7 +110,7 @@
         </div>
       </div>
 
-      <!-- Cột phải -->
+      
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Thông tin liên hệ</h5>
@@ -115,13 +130,14 @@
     </div>
   </div>
 
-  <!-- Footer -->
+
   <footer class="bg-dark text-white text-center mt-5 p-4">
     <div class="container">
-      <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>
+      
       <p>📞 Hotline: <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
       <p>📱 Zalo: <a th:href="'https://zalo.me/' + ${settings.zalo}" class="text-white" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
       <p>🌐 Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+    <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>
     </div>
   </footer>
 

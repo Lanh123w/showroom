@@ -9,6 +9,8 @@ import com.example.forddealer.model.Car;
 import com.example.forddealer.service.CarService;
 import com.example.forddealer.service.SettingsService;
 import com.example.forddealer.service.CarCategoryService;
+import com.example.forddealer.service.BannerService;
+
 import java.util.List;
 
 @Controller
@@ -17,17 +19,22 @@ public class HomeController {
     private final CarService carService;
     private final SettingsService settingsService;
     private final CarCategoryService carCategoryService;
+    private final BannerService bannerService;
 
-    public HomeController(CarService carService, SettingsService settingsService, CarCategoryService carCategoryService) {
+  
+    public HomeController(CarService carService,
+                          SettingsService settingsService,
+                          CarCategoryService carCategoryService,
+                          BannerService bannerService) {
         this.carService = carService;
         this.settingsService = settingsService;
         this.carCategoryService = carCategoryService;
-
+        this.bannerService = bannerService;
     }
 
     @GetMapping("/")
     public String index(Model model) {
-        // Lấy cấu hình website
+      
         Settings settings = settingsService.getSettings();
         if (settings == null) {
             settings = new Settings();
@@ -37,22 +44,21 @@ public class HomeController {
             settings.setFooterText("City Ford");
             settings.setAboutContent("Chưa có nội dung giới thiệu.");
             settings.setLogoPath("logo.jpg");
-            settings.setBannerPath("banner.jpg");
             settings.setZalo("Chưa cấu hình");
             settings.setWebsite("Chưa cấu hình");
         }
 
-        // Lấy danh sách xe và format giá
+      
         List<Car> cars = carService.getAllCars();
         for (Car car : cars) {
-            String formattedPrice = String.format("%,d", car.getPrice()); // ví dụ: 1,199,000,000
-            car.setFormattedPrice(formattedPrice); // cần thêm field formattedPrice trong Car.java
+            String formattedPrice = String.format("%,d", car.getPrice());
+            car.setFormattedPrice(formattedPrice); 
         }
 
         model.addAttribute("cars", cars);
         model.addAttribute("settings", settings);
         model.addAttribute("carCategories", carCategoryService.getAll());
-
+        model.addAttribute("banners", bannerService.getActiveBanners()); 
 
         return "index";
     }

@@ -10,16 +10,21 @@ import com.example.forddealer.model.Car;
 import com.example.forddealer.model.Settings;
 import com.example.forddealer.service.CarService;
 import com.example.forddealer.service.SettingsService;
+import com.example.forddealer.service.BannerService;
 
 @Controller
 public class ProductController {
 
     private final CarService carService;
     private final SettingsService settingsService;
+    private final BannerService bannerService;
 
-    public ProductController(CarService carService, SettingsService settingsService) {
+    public ProductController(CarService carService,
+                             SettingsService settingsService,
+                             BannerService bannerService) {
         this.carService = carService;
         this.settingsService = settingsService;
+        this.bannerService = bannerService;
     }
 
     @GetMapping("/product")
@@ -30,7 +35,6 @@ public class ProductController {
         if (settings == null) {
             settings = new Settings();
             settings.setLogoPath("logo.jpg");
-            settings.setBannerPath("banner.jpg");
             settings.setHotline("079-256-2288");
             settings.setEmail("info@cityford.vn");
             settings.setAddress("218 Quốc lộ 13, TP. Thủ Đức");
@@ -43,6 +47,7 @@ public class ProductController {
         model.addAttribute("cars", cars);
         model.addAttribute("settings", settings);
         model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "product";
     }

@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- Header -->
 <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
         <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
@@ -47,15 +46,28 @@
       </div>
     </nav>
   </div>
-<div class="container mt-3">
-    <img th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
-</div>
+  <div class="container mt-3">
+    <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
+          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
 
-<!-- Nội dung chính -->
 <div class="container mt-5">
     <div class="row g-4">
 
-        <!-- Cột trái -->
+      
         <div class="col-md-3">
             <h4 class="mb-3">📞 Thông tin liên hệ</h4>
             <p><strong>Hotline:</strong> <span th:text="${settings.hotline}">079-256-2288</span></p>
@@ -65,7 +77,6 @@
             <p><strong>Website:</strong> <a th:href="${settings.website}" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
         </div>
 
-        <!-- Cột giữa: Form liên hệ -->
         <div class="col-md-6">
             <h4 class="mb-3 text-center">📩 Gửi yêu cầu tư vấn</h4>
             <form th:action="@{/contact}" method="post" th:object="${contact}" class="p-3 border rounded bg-light shadow-sm">
@@ -90,7 +101,6 @@
             </div>
         </div>
 
-        <!-- Cột phải: Gợi ý dịch vụ -->
         <div class="col-md-3">
             <h4 class="mb-3">🎯 Dịch vụ nổi bật</h4>
             <ul class="list-group">
@@ -104,7 +114,6 @@
     </div>
 </div>
 
-<!-- Footer -->
 <footer class="bg-dark text-white text-center mt-5 p-4">
     <p><strong>Thông tin liên hệ</strong></p>
     <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>

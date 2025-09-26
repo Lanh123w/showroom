@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+
   <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
       <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
@@ -48,16 +48,29 @@
     </nav>
   </div>
 
-  <!-- Banner -->
   <div class="container mt-3">
-    <img th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
+    <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
+          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
   </div>
+  
 
-  <!-- Nội dung chính: 3 cột -->
   <div class="container mt-5">
     <div class="row g-4">
       
-      <!-- Cột trái: Thông tin liên hệ -->
+
       <div class="col-md-3">
         <h4 class="mb-3">📞 Thông tin liên hệ</h4>
         <p><strong>Hotline:</strong> <span th:text="${settings.hotline}">079-256-2288</span></p>
@@ -67,7 +80,6 @@
         <p><strong>Website:</strong> <a th:href="${settings.website}" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
       </div>
 
-      <!-- Cột giữa: Danh sách xe -->
       <div class="col-md-6">
         <h3 class="mb-4 text-center">🚗 Các xe thuộc loại: <span th:text="${selectedCategory}">SUV</span></h3>
         <div class="row">
@@ -76,7 +88,7 @@
               <img th:src="@{'/images/' + ${car.imagePath}}" class="card-img-top" th:alt="${car.name}">
               <div class="card-body">
                 <h5 class="card-title" th:text="${car.name} + ' - ' + ${car.model}">Tên xe</h5>
-                <p>Giá: <span th:text="${car.formattedPrice}"></span> VND</p>
+                <p>Giá: <strong th:text="${car.formattedPrice}">1,000,000,000</strong> VND</p>
                 <a th:href="@{'/car/show/' + ${car.id}}" class="btn btn-info w-100">Xem chi tiết</a>
               </div>
             </div>
@@ -84,10 +96,7 @@
         </div>
       </div>
       
-
-      <!-- Cột phải: Tin tức & khuyến mãi -->
       <div class="col-md-3">
-        <!-- Tin tức nổi bật -->
         <h4 class="mb-3 text-uppercase fw-bold text-center">📰 Tin tức nổi bật</h4>
         <div class="row row-cols-1 g-4 mb-4">
           <div th:each="news : ${latestNews}" class="col">
@@ -95,7 +104,7 @@
               <img th:src="@{'/images/' + ${news.imagePath}}" class="card-img-top" th:alt="${news.title}">
               <div class="card-body">
                 <h6 class="card-title text-primary fw-bold" th:text="${news.title}">Tiêu đề tin tức</h6>
-                <p class="card-text small" th:text="${news.content}">Nội dung tin tức</p>
+                <p class="card-text small" th:text="${#strings.abbreviate(news.content, 100)}">Nội dung tin tức</p>
                 <p class="text-muted small">
                   🗓️ Ngày đăng:
                   <span th:if="${news.createdAt != null}"
@@ -111,26 +120,29 @@
           </div>
         </div>
       
-        <!-- Khuyến mãi mới -->
+    
         <h4 class="mb-3 text-uppercase fw-bold text-center">🎁 Khuyến mãi mới</h4>
         <div class="row row-cols-1 g-4">
           <div th:each="promo : ${latestPromotions}" class="col">
-            <div class="card h-100 shadow-sm">
-              <img th:src="@{'/images/' + ${promo.imagePath}}" class="card-img-top" th:alt="${promo.title}">
-              <div class="card-body">
-                <h6 class="card-title text-success fw-bold" th:text="${promo.title}">Tiêu đề khuyến mãi</h6>
-                <p class="card-text small" th:text="${promo.description}">Nội dung khuyến mãi</p>
+            <a th:href="@{'/promotions/' + ${promo.id}}" class="text-decoration-none text-dark">
+              <div class="card h-100 shadow-sm">
+                <img th:src="@{'/images/' + ${promo.imagePath}}" class="card-img-top" th:alt="${promo.title}">
+                <div class="card-body">
+                  <h6 class="card-title text-success fw-bold" th:text="${promo.title}">Tiêu đề khuyến mãi</h6>
+                  <p class="card-text small" th:text="${#strings.abbreviate(promo.description, 100)}">Nội dung khuyến mãi</p>
+                </div>
+                <div class="card-footer bg-light text-center">
+                  <small class="text-muted">
+                    📅 Áp dụng từ
+                    <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span>
+                    đến
+                    <span th:text="${#temporals.format(promo.endDate, 'dd/MM/yyyy')}">30/10/2025</span>
+                  </small>
+                </div>
               </div>
-              <div class="card-footer bg-light text-center">
-                <small class="text-muted">
-                  📅 Áp dụng từ 
-                  <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span> 
-                  đến 
-                  <span th:text="${#temporals.format(promo.endDate, 'dd/MM/yyyy')}">30/10/2025</span>
-                </small>
-              </div>
-            </div>
+            </a>
           </div>
+        </div>
           <div th:if="${#lists.isEmpty(latestPromotions)}" class="col-12 text-center">
             <p class="text-muted">Hiện chưa có chương trình khuyến mãi nào.</p>
           </div>

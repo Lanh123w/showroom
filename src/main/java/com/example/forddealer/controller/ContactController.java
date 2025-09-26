@@ -4,6 +4,7 @@ import com.example.forddealer.model.Contact;
 import com.example.forddealer.model.Settings;
 import com.example.forddealer.service.SettingsService;
 import com.example.forddealer.service.CarService;
+import com.example.forddealer.service.BannerService;
 import com.example.forddealer.repository.ContactRepository;
 
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,16 @@ public class ContactController {
     private final ContactRepository contactRepo;
     private final SettingsService settingsService;
     private final CarService carService;
+    private final BannerService bannerService;
 
-    public ContactController(ContactRepository contactRepo, SettingsService settingsService, CarService carService) {
+    public ContactController(ContactRepository contactRepo,
+                             SettingsService settingsService,
+                             CarService carService,
+                             BannerService bannerService) {
         this.contactRepo = contactRepo;
         this.settingsService = settingsService;
         this.carService = carService;
+        this.bannerService = bannerService;
     }
 
     @PostMapping("/contact")
@@ -42,9 +48,8 @@ public class ContactController {
 
         model.addAttribute("settings", settings);
         model.addAttribute("contact", new Contact());
-
-
         model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "contact";
     }

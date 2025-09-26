@@ -4,6 +4,7 @@ import com.example.forddealer.model.Booking;
 import com.example.forddealer.model.Settings;
 import com.example.forddealer.service.SettingsService;
 import com.example.forddealer.service.CarService;
+import com.example.forddealer.service.BannerService;
 import com.example.forddealer.repository.BookingRepository;
 
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,16 @@ public class BookingController {
     private final BookingRepository bookingRepo;
     private final SettingsService settingsService;
     private final CarService carService;
+    private final BannerService bannerService;
 
-    public BookingController(BookingRepository bookingRepo, SettingsService settingsService, CarService carService) {
+    public BookingController(BookingRepository bookingRepo,
+                             SettingsService settingsService,
+                             CarService carService,
+                             BannerService bannerService) {
         this.bookingRepo = bookingRepo;
         this.settingsService = settingsService;
         this.carService = carService;
+        this.bannerService = bannerService;
     }
 
     @PostMapping("/booking")
@@ -46,14 +52,13 @@ public class BookingController {
             settings.setFooterText("City Ford");
             settings.setAboutContent("Chưa có nội dung giới thiệu.");
             settings.setLogoPath("logo.jpg");
-            settings.setBannerPath("banner.jpg");
             settings.setZalo("Chưa cấu hình");
             settings.setWebsite("Chưa cấu hình");
         }
 
         model.addAttribute("settings", settings);
-
         model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "booking";
     }

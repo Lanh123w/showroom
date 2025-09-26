@@ -5,6 +5,7 @@ import com.example.forddealer.model.ServiceContent;
 import com.example.forddealer.service.SettingsService;
 import com.example.forddealer.service.ServiceContentService;
 import com.example.forddealer.service.CarService;
+import com.example.forddealer.service.BannerService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,16 @@ public class ServicesController {
     private final SettingsService settingsService;
     private final ServiceContentService serviceContentService;
     private final CarService carService;
+    private final BannerService bannerService;
 
-    public ServicesController(SettingsService settingsService, ServiceContentService serviceContentService, CarService carService) {
+    public ServicesController(SettingsService settingsService,
+                              ServiceContentService serviceContentService,
+                              CarService carService,
+                              BannerService bannerService) {
         this.settingsService = settingsService;
         this.serviceContentService = serviceContentService;
         this.carService = carService;
+        this.bannerService = bannerService;
     }
 
     @GetMapping("/services")
@@ -41,6 +47,7 @@ public class ServicesController {
         model.addAttribute("settings", settings);
         model.addAttribute("services", services);
         model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "services";
     }

@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+
   <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
       <img th:if="${settings.logoPath != null}" th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
@@ -50,16 +50,28 @@
     </nav>
   </div>
 
-  <!-- Banner -->
   <div class="container mt-3">
-    <img th:if="${settings.bannerPath != null}" th:src="@{'/images/' + ${settings.bannerPath}}" alt="Banner City Ford" class="img-fluid rounded shadow w-100">
+    <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
+          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
   </div>
 
-  <!-- Nội dung 3 cột -->
+
   <div class="container mt-5">
     <div class="row g-4">
 
-      <!-- Cột trái -->
       <div class="col-md-3">
         <div class="bg-white border rounded p-3 shadow-sm">
           <h5 class="text-primary">📍 Thông tin nhanh</h5>
@@ -73,7 +85,6 @@
         </div>
       </div>
 
-      <!-- Cột giữa -->
       <div class="col-md-6">
         <h4 class="text-center mb-4">🎁 Chương trình khuyến mãi đang áp dụng</h4>
         <div class="row row-cols-1 g-4">
@@ -86,9 +97,9 @@
               </div>
               <div class="card-footer bg-light text-center">
                 <small class="text-muted">
-                  📅 Áp dụng từ 
-                  <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span> 
-                  đến 
+                  📅 Áp dụng từ
+                  <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span>
+                  đến
                   <span th:text="${#temporals.format(promo.endDate, 'dd/MM/yyyy')}">30/10/2025</span>
                 </small>
               </div>
@@ -97,7 +108,6 @@
         </div>
       </div>
 
-      <!-- Cột phải -->
       <div class="col-md-3">
         <div class="bg-white border rounded p-3 shadow-sm">
           <h5 class="text-success">📢 Tin showroom</h5>
@@ -113,10 +123,8 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="bg-dark text-white text-center mt-5 p-4">
     <p><strong>Thông tin liên hệ</strong></p>
-    <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>
     <p>📞 Hotline: <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
     <p>📱 Zalo: <a th:href="'https://zalo.me/' + ${settings.zalo}" class="text-white" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
     <p>✅ Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>

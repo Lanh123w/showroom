@@ -27,6 +27,7 @@
           <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/promotion-form">Chỉnh sửa khuyến mãi</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/news-form">Chỉnh sửa tin tức</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin/banners">Chỉnh banner</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/create-account">Tạo tài khoản</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/change-password">Đổi mật khẩu</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/accounts">Danh sách tài khoản</a></li>
@@ -39,7 +40,6 @@
   </div>
   
       <div class="container mt-5">
-        <!-- Thông báo -->
         <div th:if="${message}" class="alert alert-success text-center">
           <span th:text="${message}">Thao tác thành công!</span>
         </div>
@@ -120,7 +120,6 @@
 </div>
 
 
-<!-- Cấu hình website -->
 <div class="card shadow-sm">
     <div class="card-header bg-secondary text-white">
         <h5 class="mb-0">⚙️ Cấu hình website</h5>
@@ -156,10 +155,6 @@
             <div class="col-md-6">
                 <label class="form-label">Logo</label>
                 <input name="logoFile" type="file" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Banner</label>
-                <input name="bannerFile" type="file" class="form-control">
             </div>
             <div class="col-md-12">
                 <label class="form-label">Footer</label>

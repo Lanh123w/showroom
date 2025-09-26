@@ -15,6 +15,7 @@ import com.example.forddealer.service.CarService;
 import com.example.forddealer.service.NewsService;
 import com.example.forddealer.service.PromotionService;
 import com.example.forddealer.service.SettingsService;
+import com.example.forddealer.service.BannerService;
 
 @Controller
 @RequestMapping("/car")
@@ -24,19 +25,21 @@ public class CarController {
     private final SettingsService settingsService;
     private final NewsService newsService;
     private final PromotionService promotionService;
+    private final BannerService bannerService;
 
     @Autowired
     public CarController(CarService carService,
                          SettingsService settingsService,
                          NewsService newsService,
-                         PromotionService promotionService) {
+                         PromotionService promotionService,
+                         BannerService bannerService) {
         this.carService = carService;
         this.settingsService = settingsService;
         this.newsService = newsService;
         this.promotionService = promotionService;
+        this.bannerService = bannerService;
     }
 
-    // ✅ Hiển thị chi tiết xe
     @GetMapping("/show/{id}")
     public String showCar(@PathVariable Long id, Model model) {
         Car car = carService.getById(id);
@@ -57,11 +60,11 @@ public class CarController {
         model.addAttribute("settings", settingsService.getSettings());
         model.addAttribute("car", car);
         model.addAttribute("carCategories", carService.getUsedCategories());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "car-detail";
     }
 
-    // ✅ Hiển thị xe theo loại
     @GetMapping("/category/{id}")
     public String showCarsByCategory(@PathVariable Long id, Model model) {
         List<Car> cars = carService.getByCategoryId(id);
@@ -72,6 +75,16 @@ public class CarController {
             if (category != null && category.getName() != null) {
                 categoryName = category.getName();
             }
+
+            for (Car car : cars) {
+                Long price = car.getPrice();
+                if (price == null || price == 0) {
+                    car.setFormattedPrice("Chưa cập nhật");
+                } else {
+                    String formattedPrice = String.format("%,d", price);
+                    car.setFormattedPrice(formattedPrice.replace(",", "."));
+                }
+            }
         }
 
         model.addAttribute("cars", cars);
@@ -80,11 +93,11 @@ public class CarController {
         model.addAttribute("carCategories", carService.getUsedCategories());
         model.addAttribute("latestNews", newsService.getAll());
         model.addAttribute("latestPromotions", promotionService.getActivePromotions());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "car-list";
     }
 
-    // ✅ Trang tham khảo xe
     @GetMapping("/tham-khao-xe")
     public String showReferenceCars(Model model) {
         List<Car> cars = carService.getAllCars();
@@ -104,6 +117,7 @@ public class CarController {
         model.addAttribute("carCategories", carService.getUsedCategories());
         model.addAttribute("latestNews", newsService.getAll());
         model.addAttribute("latestPromotions", promotionService.getActivePromotions());
+        model.addAttribute("banners", bannerService.getActiveBanners());
 
         return "car-reference";
     }

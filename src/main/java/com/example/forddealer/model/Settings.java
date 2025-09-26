@@ -11,7 +11,6 @@ public class Settings {
     private Integer id;
 
     private String logoPath;
-    private String bannerPath;
     private String footerText;
     @Lob
     @Column(name = "about_content", columnDefinition = "TEXT")
@@ -29,8 +28,6 @@ public class Settings {
     public String getLogoPath() { return logoPath; }
     public void setLogoPath(String logoPath) { this.logoPath = logoPath; }
 
-    public String getBannerPath() { return bannerPath; }
-    public void setBannerPath(String bannerPath) { this.bannerPath = bannerPath; }
 
     public String getFooterText() { return footerText; }
     public void setFooterText(String footerText) { this.footerText = footerText; }
