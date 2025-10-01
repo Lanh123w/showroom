@@ -42,35 +42,35 @@
 <div class="container mt-4">
   <h3 class="text-center mb-4">📸 Quản lý Banner</h3>
 
+<form th:action="@{/admin/banners/save}" th:object="${banner}" method="post" enctype="multipart/form-data" class="row g-3 mb-5">
+  <input type="hidden" th:field="*{id}" th:object="${banner}">
 
-  <form th:action="@{/admin/banners/save}" method="post" enctype="multipart/form-data" class="row g-3 mb-5">
-    <input type="hidden" th:field="*{id}" th:object="${banner}">
-    
-    <div class="col-md-6">
-      <label class="form-label">Tiêu đề</label>
-      <input type="text" class="form-control" th:field="*{title}" th:object="${banner}" required>
-    </div>
+  <div class="col-md-6">
+    <label class="form-label">Tiêu đề</label>
+    <input type="text" class="form-control" th:field="*{title}" th:object="${banner}" required>
+  </div>
 
-    <div class="col-md-6">
-      <label class="form-label">Ảnh banner</label>
-      <input type="file" name="imageFile" class="form-control" onchange="previewImage(event)">
-      <div id="preview" class="mt-2">
-        <img th:if="${banner.imagePath != null}" th:src="@{'/images/' + ${banner.imagePath}}" class="img-fluid rounded" style="max-width: 200px;">
-      </div>
+  <div class="col-md-6">
+    <label class="form-label">Ảnh banner</label>
+    <input type="file" name="imageFile" class="form-control" onchange="previewImage(event)">
+    <div id="preview" class="mt-2">
+      <img th:if="${banner.imagePath != null}" th:src="${banner.imagePath}" class="img-fluid rounded" style="max-width: 200px;">
     </div>
+  </div>
 
-    <div class="col-12">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" th:field="*{active}" th:object="${banner}">
-        <label class="form-check-label">Hiển thị banner</label>
-      </div>
+  <div class="col-12">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" th:field="*{active}" th:object="${banner}">
+      <label class="form-check-label">Hiển thị banner</label>
     </div>
+  </div>
 
-    <div class="col-12 text-center">
-      <button type="submit" class="btn btn-success me-2">💾 Lưu</button>
-      <a href="/admin/banners" class="btn btn-secondary">⬅ Làm mới</a>
-    </div>
-  </form>
+  <div class="col-12 text-center">
+    <button type="submit" class="btn btn-success me-2">💾 Lưu</button>
+    <a href="/admin/banners" class="btn btn-secondary">⬅ Làm mới</a>
+  </div>
+</form>
+
 
 
   <div class="table-responsive">
@@ -83,25 +83,26 @@
           <th>Thao tác</th>
         </tr>
       </thead>
-      <tbody id="sortable-banner">
-        <tr th:each="b : ${banners}" th:attr="data-id=${b.id}">
-          <td th:text="${b.title}">Tiêu đề</td>
-          <td>
-            <img th:src="@{'/images/' + ${b.imagePath}}" class="img-fluid rounded" style="max-width: 120px;">
-          </td>
-          <td>
-            <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input toggle-switch" type="checkbox"
-                     th:attr="data-id=${b.id}" th:checked="${b.active}">
-            </div>
-            <small th:if="${!b.active}" class="text-muted">Tạm ngưng</small>
-          </td>
-          <td>
-            <a th:href="@{'/admin/banners/edit/' + ${b.id}}" class="btn btn-sm btn-warning me-1">Sửa</a>
-            <a th:href="@{'/admin/banners/delete/' + ${b.id}}" class="btn btn-sm btn-danger">Xóa</a>
-          </td>
-        </tr>
-      </tbody>
+    <tbody id="sortable-banner">
+  <tr th:each="b : ${banners}" th:attr="data-id=${b.id}">
+    <td th:text="${b.title}">Tiêu đề</td>
+    <td>
+      <img th:src="${b.imagePath}" class="img-fluid rounded" style="max-width: 120px;">
+    </td>
+    <td>
+      <div class="form-check form-switch d-flex justify-content-center">
+        <input class="form-check-input toggle-switch" type="checkbox"
+               th:attr="data-id=${b.id}" th:checked="${b.active}">
+      </div>
+      <small th:if="${!b.active}" class="text-muted">Tạm ngưng</small>
+    </td>
+    <td>
+      <a th:href="@{'/admin/banners/edit/' + ${b.id}}" class="btn btn-sm btn-warning me-1">Sửa</a>
+      <a th:href="@{'/admin/banners/delete/' + ${b.id}}" class="btn btn-sm btn-danger">Xóa</a>
+    </td>
+  </tr>
+</tbody>
+
     </table>
   </div>
 </div>
