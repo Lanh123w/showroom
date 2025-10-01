@@ -2,12 +2,12 @@ package com.example.forddealer.controller;
 
 import com.example.forddealer.model.Banner;
 import com.example.forddealer.service.BannerService;
+import com.example.forddealer.service.CloudinaryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,9 +16,11 @@ import java.util.List;
 public class BannerController {
 
     private final BannerService bannerService;
+    private final CloudinaryService cloudinaryService;
 
-    public BannerController(BannerService bannerService) {
+    public BannerController(BannerService bannerService, CloudinaryService cloudinaryService) {
         this.bannerService = bannerService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
@@ -40,12 +42,8 @@ public class BannerController {
                              @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
         if (!imageFile.isEmpty()) {
-            String fileName = imageFile.getOriginalFilename();
-            String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-            File dest = new File(uploadDir + fileName);
-            dest.getParentFile().mkdirs();
-            imageFile.transferTo(dest);
-            banner.setImagePath(fileName);
+            String imageUrl = cloudinaryService.uploadImage(imageFile);
+            banner.setImagePath(imageUrl);
         }
 
         bannerService.save(banner);
