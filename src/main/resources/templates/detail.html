@@ -25,10 +25,10 @@
 </head>
 <body>
 
-  <!-- Header -->
+ 
   <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
-      <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
+      <img th:src="${settings.logoPath}" alt="City Ford Logo" height="50">
       <div class="text-end">
         <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
         <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Navbar -->
+
   <div class="container mt-2">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -65,14 +65,13 @@
     </nav>
   </div>
 
-  <!-- Banner -->
+
   <div class="container mt-3">
     <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
       <div class="carousel-inner">
         <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
-          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-          </div>
+          <img th:src="${banner.imagePath}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2"></div>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -84,10 +83,9 @@
     </div>
   </div>
 
+ 
   <div class="container mt-5">
     <div class="row g-4">
-
-
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Danh mục</h5>
@@ -102,29 +100,23 @@
         </div>
       </div>
 
-
       <div class="col-md-6">
         <div class="content-box">
           <h4 class="mb-3 text-center text-uppercase fw-bold" th:text="${news.title}">Tiêu đề bài viết</h4>
-
           <div class="text-center mb-4">
-            <img th:if="${news.imagePath != null}" th:src="@{'/images/' + ${news.imagePath}}" alt="Ảnh tin tức" class="img-fluid news-image">
+            <img th:if="${news.imagePath != null}" th:src="${news.imagePath}" alt="Ảnh tin tức" class="img-fluid news-image">
           </div>
-
           <div class="mb-3 text-muted text-center">
             🗓️ Ngày đăng: <span th:text="${#temporals.format(news.createdAt, 'dd/MM/yyyy')}">26/09/2025</span>
           </div>
-
           <div th:utext="${news.content}">
             Nội dung bài viết sẽ hiển thị ở đây...
           </div>
-
           <div class="mt-4 text-center">
             <a href="/news" class="btn btn-outline-secondary">⬅ Quay lại danh sách tin tức</a>
           </div>
         </div>
       </div>
-
 
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
@@ -141,11 +133,10 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
 
-
+  
   <footer class="bg-dark text-white text-center mt-5 p-4">
     <div class="container">
       <p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức...</p>
@@ -154,7 +145,7 @@
       <p>🌐 Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
     </div>
   </footer>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  </body>
+  </html>

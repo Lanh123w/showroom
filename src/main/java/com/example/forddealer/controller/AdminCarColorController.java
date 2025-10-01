@@ -1,13 +1,19 @@
 package com.example.forddealer.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.example.forddealer.model.Car;
 import com.example.forddealer.model.CarColor;
 import com.example.forddealer.service.CarColorService;
 import com.example.forddealer.service.CarService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/colors")
@@ -77,14 +83,26 @@ public class AdminCarColorController {
         if (name == null) return "#cccccc";
         String lower = name.trim().toLowerCase();
         return switch (lower) {
-            case "đen", "đen bóng" -> "#000000";
-            case "trắng", "trắng ngọc trai" -> "#f8f8f8";
+            case "đen", "đen bóng", "đen nhám" -> "#000000";
+            case "trắng", "trắng ngọc trai", "trắng sứ" -> "#f8f8f8";
             case "xanh rêu" -> "#556b2f";
-            case "đỏ", "đỏ thể thao" -> "#ff0000";
-            case "xám" -> "#808080";
-            case "xanh dương" -> "#1e90ff";
-            case "vàng" -> "#ffd700";
-            default -> "#cccccc";
+            case "xanh lá", "xanh lá cây" -> "#228b22";
+            case "xanh dương", "xanh biển", "xanh navy" -> "#1e90ff";
+            case "xanh da trời" -> "#87ceeb";
+            case "xanh ngọc" -> "#00ced1";
+            case "đỏ", "đỏ thể thao", "đỏ tươi", "đỏ đô" -> "#ff0000";
+            case "đỏ mận" -> "#800000";
+            case "xám", "xám bạc", "xám lông chuột" -> "#808080";
+            case "vàng", "vàng cát", "vàng đồng" -> "#ffd700";
+            case "cam", "cam đất" -> "#ff8c00";
+            case "nâu", "nâu đất" -> "#8b4513";
+            case "hồng", "hồng pastel" -> "#ffc0cb";
+            case "tím", "tím than", "tím pastel" -> "#800080";
+            case "bạc" -> "#c0c0c0";
+            case "be", "màu kem", "kem sữa" -> "#f5f5dc";
+            case "xanh lục bảo" -> "#50c878";
+            default -> "#cccccc"; // màu mặc định nếu không khớp
         };
     }
+    
 }

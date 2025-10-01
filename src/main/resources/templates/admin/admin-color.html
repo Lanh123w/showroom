@@ -27,29 +27,40 @@
               <li class="nav-item"><a class="nav-link" href="/admin/services">Quản lí dịch vụ</a></li>
               <li class="nav-item"><a class="nav-link" href="/admin/categories">Danh sách loại xe</a></li>
               <li class="nav-item"><a class="nav-link" href="/admin/colors">Chỉnh sửa màu xe</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/bookings">Danh sách đặt lịch</a></li>
             </ul>
           </div>
         </nav>
       </div>
     <h3 class="mb-3">🎨 Quản lý màu xe</h3>
 
-    <!-- Form thêm/sửa màu -->
+   
     <form th:action="@{/admin/colors/save}" method="post" th:object="${color}" class="row g-3 mb-4">
         <input type="hidden" th:field="*{id}" />
+    
         <div class="col-md-6">
             <label for="name" class="form-label">Tên màu</label>
-            <input type="text" class="form-control" th:field="*{name}" required>
+            <select class="form-select" th:field="*{name}" required>
+                <option value="" disabled selected>-- Chọn màu --</option>
+                <option th:each="c : ${colors}"
+                        th:value="${c.name}"
+                        th:text="${c.name}">
+                </option>
+            </select>
         </div>
+    
         <div class="col-md-6">
             <label for="priceAdjustment" class="form-label">Giá cộng thêm</label>
             <input type="number" class="form-control" th:field="*{priceAdjustment}" required>
         </div>
+    
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Lưu màu</button>
         </div>
     </form>
+    
 
-    <!-- Bảng danh sách màu -->
+ 
     <table class="table table-bordered">
         <thead>
             <tr><th>ID</th><th>Tên màu</th><th>Giá cộng thêm</th><th>Hành động</th></tr>
@@ -91,7 +102,6 @@
         </div>
     </form>
 
-
     <h5 class="mt-4 mb-3">📋 Danh sách màu đã gán cho xe</h5>
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
@@ -102,19 +112,38 @@
                     <th style="width: 40%">Hành động</th>
                 </tr>
             </thead>
-        <tbody>
-            <tr th:each="car : ${cars}">
-            <td th:rowspan="${#lists.size(car.colors)}" th:text="${car.name}"class="text-center align-middle fw-semibold"> </td>
-            <td th:each="color : ${car.colors}" th:text="${color.name}" class="text-center"></td>
-            <td class="text-center" th:each="color : ${car.colors}">
-             <a th:href="@{'/admin/colors/mapping/delete?carId=' + ${car.id} + '&colorId=' + ${color.id}}"  class="btn btn-danger btn-sm"
-             onclick="return confirm('Xóa màu này khỏi xe?')">Xóa</a>
-            </td>
-            </tr>
+            <tbody>
+                <th:block th:each="car : ${cars}">
+                    <th:block th:if="${#lists.isEmpty(car.colors)}">
+                        <tr>
+                            <td th:text="${car.name}" class="text-center fw-semibold"></td>
+                            <td class="text-center text-muted">Chưa có màu</td>
+                            <td class="text-center">
+                                <span class="text-muted">—</span>
+                            </td>
+                        </tr>
+                    </th:block>
+    
+                    <th:block th:each="color, iterStat : ${car.colors}">
+                        <tr>
+                            <td th:if="${iterStat.index == 0}"
+                                th:rowspan="${#lists.size(car.colors)}"
+                                th:text="${car.name}"
+                                class="text-center align-middle fw-semibold">
+                            </td>
+                            <td th:text="${color.name}" class="text-center"></td>
+                            <td class="text-center">
+                                <a th:href="@{'/admin/colors/mapping/delete?carId=' + ${car.id} + '&colorId=' + ${color.id}}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Xóa màu này khỏi xe?')">Xóa</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </th:block>
             </tbody>
-    </table>
-</div>
-
+        </table>
+    </div>
+    
     
 </body>
 </html>

@@ -20,6 +20,7 @@ import com.example.forddealer.model.Settings;
 import com.example.forddealer.service.AdminService;
 import com.example.forddealer.service.CarCategoryService;
 import com.example.forddealer.service.CarService;
+import com.example.forddealer.service.CloudinaryService;
 import com.example.forddealer.service.SettingsService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,15 +33,19 @@ public class AdminController {
     private final SettingsService settingsService;
     private final AdminService adminService;
     private final CarCategoryService carCategoryService;
+    private final CloudinaryService cloudinaryService;
 
-
-    public AdminController(CarService carService, SettingsService settingsService, AdminService adminService, CarCategoryService carCategoryService) {
+    public AdminController(CarService carService,
+                           SettingsService settingsService,
+                           AdminService adminService,
+                           CarCategoryService carCategoryService,
+                           CloudinaryService cloudinaryService) {
         this.carService = carService;
         this.settingsService = settingsService;
         this.adminService = adminService;
         this.carCategoryService = carCategoryService;
+        this.cloudinaryService = cloudinaryService;
     }
-
     
     @GetMapping("/login")
     public String loginForm() {
@@ -192,24 +197,49 @@ public class AdminController {
     @PostMapping("/add-car")
     public String addCar(@ModelAttribute Car car,
                          @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-            File destination = new File(uploadDir + fileName);
-            imageFile.transferTo(destination);
-            car.setImagePath(fileName);
+            String imageUrl = cloudinaryService.uploadImage(imageFile);
+            car.setImagePath(imageUrl);
         } else {
-            car.setImagePath("default.jpg");
+            car.setImagePath("https://res.cloudinary.com/dfdnfnsasz/image/upload/v1690000000/default.jpg");
         }
-
+    
         carService.save(car);
         return "redirect:/admin/dashboard";
     }
 
-    @GetMapping("/edit-car/{id}")
+    @PostMapping("/update-settings")
+public String updateSettings(@ModelAttribute Settings settings,
+                             @RequestParam(value = "logoFile", required = false) MultipartFile logoFile,
+                             @RequestParam(value = "bannerFile", required = false) MultipartFile bannerFile) throws IOException {
+    settings.setId(1);
+    Settings old = settingsService.getSettings();
+
+    if (logoFile != null && !logoFile.isEmpty()) {
+        String logoUrl = cloudinaryService.uploadImage(logoFile);
+        settings.setLogoPath(logoUrl);
+    } else {
+        settings.setLogoPath(old.getLogoPath());
+    }
+
+    settingsService.save(settings);
+    return "redirect:/admin/dashboard";
+}
+@PostMapping("/update-car")
+public String updateCar(@ModelAttribute Car car,
+                        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+    if (imageFile != null && !imageFile.isEmpty()) {
+        String imageUrl = cloudinaryService.uploadImage(imageFile);
+        car.setImagePath(imageUrl);
+    } else {
+        Car oldCar = carService.getById(car.getId());
+        car.setImagePath(oldCar.getImagePath());
+    }
+
+    carService.save(car);
+    return "redirect:/admin/dashboard";
+}
+@GetMapping("/edit-car/{id}")
 public String editCarForm(@PathVariable Long id, Model model) {
     Car car = carService.getById(id);
     model.addAttribute("car", car);
@@ -217,58 +247,15 @@ public String editCarForm(@PathVariable Long id, Model model) {
     return "admin/edit-car";
 }
 
-
-    @PostMapping("/update-car")
-    public String updateCar(@ModelAttribute Car car,
-                            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-        String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-            File destination = new File(uploadDir + fileName);
-            imageFile.transferTo(destination);
-            car.setImagePath(fileName);
-        } else {
-            Car oldCar = carService.getById(car.getId());
-            car.setImagePath(oldCar.getImagePath());
-        }
-
-        carService.save(car);
-        return "redirect:/admin/dashboard";
-    }
-
-  
-    @GetMapping("/delete-car/{id}")
-    public String deleteCar(@PathVariable Long id) {
-        carService.delete(id);
-        return "redirect:/admin/dashboard";
-    }
-
-    @PostMapping("/update-settings")
-    public String updateSettings(@ModelAttribute Settings settings,
-                                 @RequestParam(value = "logoFile", required = false) MultipartFile logoFile,
-                                 @RequestParam(value = "bannerFile", required = false) MultipartFile bannerFile) throws IOException {
-        settings.setId(1);
-        Settings old = settingsService.getSettings();
-        String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-        File uploadFolder = new File(uploadDir);
-        if (!uploadFolder.exists()) uploadFolder.mkdirs();
-
-        if (logoFile != null && !logoFile.isEmpty()) {
-            if (old.getLogoPath() != null) {
-                File oldLogo = new File(uploadDir + old.getLogoPath());
-                if (oldLogo.exists()) oldLogo.delete();
-            }
-            String logoName = System.currentTimeMillis() + "_" + logoFile.getOriginalFilename().replaceAll("\\s+", "_");
-            logoFile.transferTo(new File(uploadDir + logoName));
-            settings.setLogoPath(logoName);
-        } else {
-            settings.setLogoPath(old.getLogoPath());
-        }
-
-
-
-        settingsService.save(settings);
-        return "redirect:/admin/dashboard";
-    }
+@GetMapping("/delete-car/{id}")
+public String deleteCar(@PathVariable Long id) {
+    carService.delete(id);
+    return "redirect:/admin/dashboard";
 }
+
+
+
+
+}
+
+

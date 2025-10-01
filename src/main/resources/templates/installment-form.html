@@ -7,11 +7,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-
-  <!-- Header -->
   <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
-      <img th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
+      <img th:src="${settings.logoPath}" alt="City Ford Logo" height="50">
       <div class="text-end">
         <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
         <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
@@ -19,7 +17,6 @@
     </div>
   </div>
 
-  <!-- Navbar -->
   <div class="container mt-2">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -43,9 +40,8 @@
     <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
       <div class="carousel-inner">
         <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
-          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-          </div>
+          <img th:src="${banner.imagePath}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2"></div>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -57,11 +53,9 @@
     </div>
   </div>
 
-  <!-- Nội dung 3 cột -->
+  <!-- Form đăng ký trả góp -->
   <div class="container mt-5">
     <div class="row g-4">
-
-      <!-- Cột trái -->
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Danh mục</h5>
@@ -76,8 +70,6 @@
         </div>
       </div>
 
-      <!-- Cột giữa: Form đăng ký -->
-           
       <div class="col-md-6">
         <div th:if="${success}" class="alert alert-success text-center">
           <span th:text="${success}">Đăng ký thành công!</span>
@@ -118,7 +110,7 @@
           <div class="col-md-6">
             <label class="form-label">Lãi suất (%/năm)</label>
             <input type="number" th:field="*{interestRate}" class="form-control" id="interestRate" min="0" step="0.1" required>
-          </div>          
+          </div>
           <div class="col-md-6">
             <label class="form-label">Số tiền còn lại (VNĐ)</label>
             <input type="number" class="form-control" id="remainingAmount" readonly>
@@ -133,7 +125,6 @@
         </form>
       </div>
 
-      <!-- Cột phải -->
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Thông tin liên hệ</h5>
@@ -149,7 +140,6 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -163,7 +153,7 @@
     </div>
   </footer>
 
-  <!-- Script tính toán tự động -->
+  <!-- Script tính toán trả góp -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const carSelect = document.getElementById("carSelect");
@@ -205,8 +195,6 @@
       termMonthsInput.addEventListener("input", updateCalculations);
       interestRateInput.addEventListener("input", updateCalculations);
       carPriceInput.addEventListener("input", updateCalculations);
-
-      // Tự động cập nhật khi trang vừa load
       carSelect.dispatchEvent(new Event("change"));
     });
   </script>

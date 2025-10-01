@@ -1,39 +1,34 @@
 package com.example.forddealer.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 
 @Entity
-public class Booking {
+public class TestDriveRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private String phone;
-
-    @Column(name = "service_type")
-    private String serviceType;
-
-    @Column(name = "booking_date")
-    private LocalDate bookingDate;
-
+    private String carName;
     private String note;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "date")
-    private LocalDate date;
-
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -44,18 +39,12 @@ public class Booking {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getServiceType() { return serviceType; }
-    public void setServiceType(String serviceType) { this.serviceType = serviceType; }
-
-    public LocalDate getBookingDate() { return bookingDate; }
-    public void setBookingDate(LocalDate bookingDate) { this.bookingDate = bookingDate; }
+    public String getCarName() { return carName; }
+    public void setCarName(String carName) { this.carName = carName; }
 
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
 }

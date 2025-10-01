@@ -27,19 +27,20 @@
           <li class="nav-item"><a class="nav-link" href="/admin/services">Quản lí dịch vụ</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/categories">Danh sách loại xe</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin/colors">Chỉnh sửa màu xe</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin/bookings">Danh sách đặt lịch</a></li>
         </ul>
       </div>
     </nav>
   </div>
   <div class="container mt-5">
-    <!-- Thông báo -->
+  
     <div th:if="${message}" class="alert alert-success text-center">
       <span th:text="${message}">Thao tác thành công!</span>
     </div>
 
       
 <div class="container mt-5">
-  <!-- Form thêm/sửa khuyến mãi -->
+
   <div class="card shadow-sm mb-5">
     <div class="card-header bg-primary text-white">
       <h4 class="mb-0"
@@ -89,7 +90,7 @@
     </div>
   </div>
 
-  <!-- Danh sách khuyến mãi -->
+
   <div class="card shadow-sm">
     <div class="card-header bg-dark text-white">
       <h5 class="mb-0">📋 Danh sách khuyến mãi hiện có</h5>

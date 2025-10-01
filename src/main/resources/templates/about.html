@@ -8,11 +8,10 @@
 </head>
 <body>
 
-
   <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center">
-        <img th:if="${settings.logoPath != null}" th:src="@{'/images/' + ${settings.logoPath}}" alt="City Ford Logo" height="50">
-        <img th:if="${settings.logoPath == null}" th:src="@{'/images/default-logo.jpg'}" alt="City Ford Logo" height="50">
+      <img th:if="${settings.logoPath != null}" th:src="${settings.logoPath}" alt="City Ford Logo" height="50">
+      <img th:if="${settings.logoPath == null}" th:src="@{'/images/default-logo.jpg'}" alt="City Ford Logo" height="50">
       <div class="text-end">
         <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
         <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
@@ -39,7 +38,6 @@
               </li>
             </ul>
           </li>
-  
           <li class="nav-item"><a class="nav-link" href="/news">Tin tức</a></li>
           <li class="nav-item"><a class="nav-link" href="/promotions">Khuyến mãi</a></li>
           <li class="nav-item"><a class="nav-link" href="/installment">Mua xe trả góp</a></li>
@@ -54,9 +52,8 @@
     <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
       <div class="carousel-inner">
         <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
-          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-          </div>
+          <img th:src="${banner.imagePath}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2"></div>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -67,7 +64,6 @@
       </button>
     </div>
   </div>
-
 
   <div class="container mt-5">
     <div class="row g-4">
@@ -113,9 +109,9 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
+
   <footer class="bg-dark text-white text-center mt-5 p-4">
     <p><strong>Thông tin liên hệ</strong></p>
     <p>📞 Hotline bán hàng (24/7): <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
@@ -127,9 +123,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 <style>
   .navbar-nav .dropdown:hover .dropdown-menu {
-     display: block;
-     margin-top: 0;
-   }
- </style>
+    display: block;
+    margin-top: 0;
+  }
+</style>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chỉnh sửa lịch đặt dịch vụ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h4 class="mb-3">🛠️ Chỉnh sửa lịch đặt dịch vụ</h4>
+
+    <form th:action="@{/admin/bookings/update}" th:object="${booking}" method="post" class="row g-3">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="col-md-6">
+            <label class="form-label">Họ tên</label>
+            <input type="text" th:field="*{name}" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" th:field="*{phone}" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Loại dịch vụ</label>
+            <input type="text" th:field="*{serviceType}" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Ngày đặt</label>
+            <p class="form-control-plaintext" th:text="${#temporals.format(booking.bookingDate, 'dd/MM/yyyy')}">—</p>
+            <input type="hidden" th:field="*{bookingDate}" />
+        </div>
+        
+
+        <div class="col-12">
+            <label class="form-label">Ghi chú</label>
+            <textarea th:field="*{note}" class="form-control" rows="3" readonly></textarea>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Ngày hoàn thành</label>
+            <input type="date" th:field="*{date}" class="form-control" />
+        </div>
+
+        <div class="col-12 text-end mt-3">
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <a href="/admin/bookings" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

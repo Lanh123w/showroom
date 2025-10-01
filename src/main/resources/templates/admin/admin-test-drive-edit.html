@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh sửa yêu cầu lái thử</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-2">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav mx-auto">
+              <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/promotion-form">Chỉnh sửa khuyến mãi</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/news-form">Chỉnh sửa tin tức</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/banners">Chỉnh banner</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/create-account">Tạo tài khoản</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/change-password">Đổi mật khẩu</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/accounts">Danh sách tài khoản</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/services">Quản lí dịch vụ</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/categories">Danh sách loại xe</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/colors">Chỉnh sửa màu xe</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/bookings">Danh sách đặt lịch</a></li>
+              <li class="nav-item"><a class="nav-link" href="/admin/test-drive/list">Yêu cầu lái thử</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+<div class="container mt-5">
+    <h3 class="text-center text-success mb-4">✏️ Chỉnh sửa yêu cầu lái thử</h3>
+
+    <form th:action="@{/admin/test-drive/update}" th:object="${request}" method="post" class="border p-4 rounded bg-light">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label class="form-label">Họ tên</label>
+            <input type="text" th:field="*{name}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" th:field="*{phone}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Loại xe</label>
+            <input type="text" th:field="*{carName}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ghi chú</label>
+            <textarea th:field="*{note}" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+            <a th:href="@{/admin/test-drive/list}" class="btn btn-secondary ms-2">⬅️ Quay lại</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.example.forddealer.controller;
 
 import com.example.forddealer.model.Promotion;
+import com.example.forddealer.service.CloudinaryService;
 import com.example.forddealer.service.PromotionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 
 @Controller
@@ -16,22 +16,22 @@ import java.io.IOException;
 public class AdminPromotionController {
 
     private final PromotionService promoService;
+    private final CloudinaryService cloudinaryService;
 
-    public AdminPromotionController(PromotionService promoService) {
+    public AdminPromotionController(PromotionService promoService, CloudinaryService cloudinaryService) {
         this.promoService = promoService;
+        this.cloudinaryService = cloudinaryService;
     }
 
-    // Hiển thị form và danh sách khuyến mãi
     @GetMapping
     public String dashboard(Model model,
                             @ModelAttribute("message") String message) {
         model.addAttribute("promotion", new Promotion());
         model.addAttribute("promotions", promoService.getAll());
-        model.addAttribute("message", message); // hiển thị thông báo nếu có
+        model.addAttribute("message", message);
         return "admin/promotion-form";
     }
 
-    // Hiển thị form sửa khuyến mãi
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         Promotion promo = promoService.getById(id);
@@ -40,20 +40,14 @@ public class AdminPromotionController {
         return "admin/promotion-form";
     }
 
-    // Lưu khuyến mãi (thêm mới hoặc cập nhật)
     @PostMapping("/save")
     public String save(@ModelAttribute Promotion promotion,
                        @RequestParam("imageFile") MultipartFile imageFile,
                        RedirectAttributes redirectAttributes) throws IOException {
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-            imageFile.transferTo(new File(uploadDir + fileName));
-            promotion.setImagePath(fileName);
+            String imageUrl = cloudinaryService.uploadImage(imageFile);
+            promotion.setImagePath(imageUrl);
         } else if (promotion.getId() != null) {
             Promotion old = promoService.getById(promotion.getId());
             if (old != null) {
@@ -67,7 +61,6 @@ public class AdminPromotionController {
         return "redirect:/admin/promotion-form";
     }
 
-    // Xóa khuyến mãi
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id,
                          RedirectAttributes redirectAttributes) {

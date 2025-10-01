@@ -1,6 +1,5 @@
 package com.example.forddealer.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -11,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.forddealer.model.News;
+import com.example.forddealer.service.CloudinaryService;
 import com.example.forddealer.service.NewsService;
 
 @Controller
@@ -18,9 +18,11 @@ import com.example.forddealer.service.NewsService;
 public class AdminNewsController {
 
     private final NewsService newsService;
+    private final CloudinaryService cloudinaryService;
 
-    public AdminNewsController(NewsService newsService) {
+    public AdminNewsController(NewsService newsService, CloudinaryService cloudinaryService) {
         this.newsService = newsService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
@@ -51,14 +53,9 @@ public class AdminNewsController {
             news.setCreatedAt(LocalDateTime.now());
         }
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/images/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-            imageFile.transferTo(new File(uploadDir + fileName));
-            news.setImagePath(fileName);
+            String imageUrl = cloudinaryService.uploadImage(imageFile);
+            news.setImagePath(imageUrl);
         } else if (news.getId() != null) {
             News old = newsService.getById(news.getId());
             if (old != null) {

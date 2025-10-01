@@ -27,7 +27,6 @@
               </li>
             </ul>
           </li>
-  
           <li class="nav-item"><a class="nav-link" href="/news">Tin tức</a></li>
           <li class="nav-item"><a class="nav-link" href="/promotions">Khuyến mãi</a></li>
           <li class="nav-item"><a class="nav-link" href="/installment">Mua xe trả góp</a></li>
@@ -37,13 +36,13 @@
       </div>
     </nav>
   </div>
+
   <div class="container mt-3">
     <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
       <div class="carousel-inner">
         <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
-          <img th:src="@{'/images/' + ${banner.imagePath}}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-          </div>
+          <img th:src="${banner.imagePath}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2"></div>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -54,6 +53,7 @@
       </button>
     </div>
   </div>
+
   <div class="container mt-5">
     <div class="row g-4">
       <div class="col-md-3">
@@ -73,7 +73,7 @@
       <div class="col-md-6">
         <h4 class="text-center mb-4 text-uppercase fw-bold" th:text="${car.name} + ' - ' + ${car.model}">Tên xe - Model</h4>
         <div class="card shadow-sm">
-          <img th:src="@{'/images/' + ${car.imagePath}}" class="card-img-top" alt="Ảnh xe">
+          <img th:src="${car.imagePath}" class="card-img-top" alt="Ảnh xe">
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <li class="list-group-item">📂 Loại xe: <strong th:text="${car.category.name}">SUV</strong></li>
@@ -83,13 +83,13 @@
               <li class="list-group-item">📝 Mô tả: <span th:text="${car.description}">Xe SUV 7 chỗ, động cơ diesel...</span></li>
             </ul>
             <div class="mt-4 text-center">
-              <a th:href="@{/booking}" class="btn btn-success me-2">Đặt lịch lái thử</a>
+              <a th:href="@{'/test-drive/form?carName=' + ${car.name}}" class="btn btn-success me-2">Đặt lịch lái thử</a>
               <a th:href="@{/product}" class="btn btn-secondary">Quay lại danh sách xe</a>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div class="col-md-3">
         <div class="bg-light p-3 rounded shadow-sm">
           <h5 class="text-primary">Thông tin liên hệ</h5>
@@ -105,7 +105,6 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -116,9 +115,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 <style>
   .navbar-nav .dropdown:hover .dropdown-menu {
-     display: block;
-     margin-top: 0;
-   }
- </style>
+    display: block;
+    margin-top: 0;
+  }
+</style>

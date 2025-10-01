@@ -7,6 +7,7 @@ import com.example.forddealer.service.CarService;
 import com.example.forddealer.service.BannerService;
 import com.example.forddealer.repository.BookingRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -62,4 +63,5 @@ public class BookingController {
 
         return "booking";
     }
+
 }

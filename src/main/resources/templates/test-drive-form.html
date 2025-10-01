@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Đặt lịch lái thử</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <img th:src="${settings.logoPath}" alt="City Ford Logo" height="50">
+    <div class="text-end">
+      <h5 class="mb-0 fw-bold text-dark">CITY FORD – FORD BÌNH TRIỆU</h5>
+      <small class="text-danger">Hotline bán hàng: <span th:text="${settings.hotline}">079-256-2288</span></small>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-2">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded px-3">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="/about">Giới thiệu</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown">Sản phẩm</a>
+          <ul class="dropdown-menu" aria-labelledby="productDropdown">
+            <li th:each="cat : ${carCategories}">
+              <a class="dropdown-item" th:href="@{'/car/category/' + ${cat.id}}" th:text="${cat.name}">SUV</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/news">Tin tức</a></li>
+        <li class="nav-item"><a class="nav-link" href="/promotions">Khuyến mãi</a></li>
+        <li class="nav-item"><a class="nav-link" href="/car/tham-khao-xe">Tham khảo xe</a></li>
+        <li class="nav-item"><a class="nav-link" href="/installment">Mua xe trả góp</a></li>
+        <li class="nav-item"><a class="nav-link" href="/services">Dịch vụ</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<div class="container mt-3">
+  <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner">
+      <div th:each="banner, stat : ${banners}" th:class="'carousel-item' + (${stat.index == 0} ? ' active' : '')">
+        <img th:src="${banner.imagePath}" class="d-block w-100 img-fluid rounded shadow" th:alt="${banner.title}">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <div class="col-lg-3">
+      <h5 class="mb-3">📞 Thông tin liên hệ</h5>
+      <p><strong>Hotline:</strong> <span th:text="${settings.hotline}">079-256-2288</span></p>
+      <p><strong>Email:</strong> <span th:text="${settings.email}">info@cityford.vn</span></p>
+      <p><strong>Địa chỉ:</strong> <span th:text="${settings.address}">218 Quốc lộ 13...</span></p>
+      <p><strong>Zalo:</strong> <a th:href="'https://zalo.me/' + ${settings.zalo}" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
+      <p><strong>Website:</strong> <a th:href="${settings.website}" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4 class="mb-3 text-primary text-center">🚗 Đặt lịch lái thử xe</h4>
+      <form th:action="@{/test-drive/submit}" th:object="${request}" method="post" class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Họ tên</label>
+          <input type="text" th:field="*{name}" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" th:field="*{phone}" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Loại xe</label>
+          <input type="text" th:field="*{carName}" class="form-control" readonly />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Ghi chú</label>
+          <textarea th:field="*{note}" class="form-control" rows="3" placeholder="Ví dụ: Tôi muốn lái thử vào cuối tuần..."></textarea>
+        </div>
+        <div class="col-12 text-end mt-3">
+          <button type="submit" class="btn btn-success">Gửi yêu cầu</button>
+          <a href="/" class="btn btn-secondary">Quay lại</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-lg-3">
+      <h5 class="mb-3 text-uppercase fw-bold text-center">📰 Tin tức nổi bật</h5>
+      <div class="row row-cols-1 g-4 mb-4">
+        <div th:each="news : ${latestNews}" class="col">
+          <div class="card h-100 shadow-sm">
+            <img th:src="${news.imagePath}" class="card-img-top" th:alt="${news.title}">
+            <div class="card-body">
+              <h6 class="card-title text-primary fw-bold" th:text="${news.title}">Tiêu đề tin tức</h6>
+              <p class="card-text small" th:text="${#strings.abbreviate(news.content, 100)}">Nội dung tin tức</p>
+              <p class="text-muted small">
+                🗓️ Ngày đăng:
+                <span th:if="${news.createdAt != null}" th:text="${#temporals.format(news.createdAt, 'dd/MM/yyyy HH:mm')}">14/06/2023</span>
+                <span th:if="${news.createdAt == null}">Không xác định</span>
+              </p>
+              <a th:href="@{'/news/' + ${news.id}}" class="btn btn-outline-primary btn-sm w-100">Xem chi tiết</a>
+            </div>
+          </div>
+        </div>
+        <div th:if="${#lists.isEmpty(latestNews)}" class="col-12 text-center">
+          <p class="text-muted">Hiện chưa có tin tức nào được đăng.</p>
+        </div>
+      </div>
+
+      <h5 class="mb-3 text-uppercase fw-bold text-center">🎁 Khuyến mãi mới</h5>
+      <div class="row row-cols-1 g-4">
+        <div th:each="promo : ${latestPromotions}" class="col">
+          <a th:href="@{'/promotions/' + ${promo.id}}" class="text-decoration-none text-dark">
+            <div class="card h-100 shadow-sm">
+              <img th:src="${promo.imagePath}" class="card-img-top" th:alt="${promo.title}">
+              <div class="card-body">
+                <h6 class="card-title text-success fw-bold" th:text="${promo.title}">Tiêu đề khuyến mãi</h6>
+                <p class="card-text small"                                th:text="${#strings.abbreviate(promo.description, 100)}">Nội dung khuyến mãi</p>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <small class="text-muted">
+                    📅 Áp dụng từ
+                    <span th:text="${#temporals.format(promo.startDate, 'dd/MM/yyyy')}">01/10/2025</span>
+                    đến
+                    <span th:text="${#temporals.format(promo.endDate, 'dd/MM/yyyy')}">30/10/2025</span>
+                </small>
+            </div>
+        </div>
+    </a>
+</div>
+<div th:if="${#lists.isEmpty(latestPromotions)}" class="col-12 text-center">
+    <p class="text-muted">Hiện chưa có chương trình khuyến mãi nào.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="bg-dark text-white text-center mt-5 p-4">
+<p><strong>Thông tin liên hệ</strong></p>
+<p th:text="${settings.footerText}">CITY FORD BÌNH TRIỆU - Đại lý chính thức của Ford Việt Nam</p>
+<p>📞 Hotline bán hàng (24/7): <a th:href="'tel:' + ${settings.hotline}" class="text-white" th:text="${settings.hotline}">079-256-2288</a></p>
+<p>📱 Zalo tư vấn (24/7): <a th:href="'https://zalo.me/' + ${settings.zalo}" class="text-white" target="_blank" th:text="${settings.zalo}">079-256-2288</a></p>
+<p>🌐 Website: <a th:href="${settings.website}" class="text-white" target="_blank" th:text="${settings.website}">www.fordbinhtrieu.com</a></p>
+<span>© City Ford 2025. All rights reserved.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
