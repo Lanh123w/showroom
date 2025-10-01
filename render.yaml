@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: showroom
+    env: docker
+    plan: starter
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: MYSQLDATABASE
+        value: railway
+      - key: MYSQLHOST
+        value: nozomi.proxy.rlwy.net
+      - key: MYSQLPORT
+        value: 14164
+      - key: MYSQLUSER
+        value: root
+      - key: MYSQLPASSWORD
+        value: rOMesFFidchvcpA4KnzaAostfnlOUwmn
+      - key: CLOUDINARY_URL
+        value: cloudinary://611153721671968:SM2mwu0xaRwI5Cmpfmqhc0mGQLY@dn6fnxsaz
+
