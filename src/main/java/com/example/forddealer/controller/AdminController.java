@@ -215,6 +215,7 @@ public String updateSettings(@ModelAttribute Settings settings,
     settings.setId(1);
     Settings old = settingsService.getSettings();
 
+   
     if (logoFile != null && !logoFile.isEmpty()) {
         String logoUrl = cloudinaryService.uploadImage(logoFile);
         settings.setLogoPath(logoUrl);
@@ -222,9 +223,19 @@ public String updateSettings(@ModelAttribute Settings settings,
         settings.setLogoPath(old.getLogoPath());
     }
 
+
+    if (settings.getDealerName() == null || settings.getDealerName().trim().isEmpty()) {
+        settings.setDealerName(old.getDealerName());
+    }
+
+  
+    if (settings.getSlogan() == null || settings.getSlogan().trim().isEmpty()) {
+        settings.setSlogan(old.getSlogan());
+    }
     settingsService.save(settings);
     return "redirect:/admin/dashboard";
 }
+
 @PostMapping("/update-car")
 public String updateCar(@ModelAttribute Car car,
                         @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
