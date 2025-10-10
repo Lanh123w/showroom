@@ -11,6 +11,8 @@ public class Settings {
     private Integer id;
 
     private String logoPath;
+     private String dealerName;
+    private String slogan; 
     private String footerText;
     @Lob
     @Column(name = "about_content", columnDefinition = "TEXT")
@@ -41,6 +43,12 @@ public class Settings {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+     public String getDealerName() { return dealerName; }
+    public void setDealerName(String dealerName) { this.dealerName = dealerName; }
+
+    public String getSlogan() { return slogan; }
+    public void setSlogan(String slogan) { this.slogan = slogan; }
+    
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
